@@ -4,8 +4,8 @@ lazy-postscribe
 Idea
 -----
 
-When using [postscribe](https://github.com/krux/postscribe) as tag-writer, you're most likely creating a dependency in your documents head.
-With lazy-postscribe you'll have a lightweight dependency for your head, which should be included in your non-blocking js-loader-bundle.
+When using [postscribe](https://github.com/krux/postscribe) as tag-writer, you're most likely creating a dependency in your document-head.
+lazy-postscribe is a lightweight dependency, which can be included in your non-blocking js-loader-bundle.
 
 Usage:
 -----
@@ -18,5 +18,5 @@ Furthermore add the callback to your js-loader (e.g. nbl):
 
     nbl.l(['postscribe.js', function() {
         lp.c();
-    }];
+    }]);
 
