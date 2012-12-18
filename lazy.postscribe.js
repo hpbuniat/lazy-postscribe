@@ -16,7 +16,12 @@
         /**
          * The stack for postscribe calls, until postscribe is ready
          */
-        s: [],
+        p: [],
+
+        /**
+         * Callback stack for functions
+         */
+        f: [],
 
         /**
          * Proxy for postscribe.
@@ -31,7 +36,7 @@
                 postscribe(target, source, options);
             }
             else {
-                this.s.push([target, source, options]);
+                this.p.push([target, source, options]);
             }
         },
 
@@ -39,9 +44,34 @@
          * The nbl-callback, which will clear the stack
          */
         c: function() {
-            while(this.s.length > 0) {
-                var a = this.s.shift();
+            while(this.p.length > 0) {
+                var a = this.p.shift();
                 postscribe(a[0], a[1], a[2]);
+            }
+
+            while(this.f.length > 0) {
+                var f = this.f.shift();
+                f();
+            }
+        },
+
+        /**
+         * Get the size of the stack
+         *
+         * @return int
+         */
+        s: function() {
+            return this.s.length;
+        },
+
+        /**
+         * Add a callback
+         *
+         * @param f
+         */
+        a: function(f) {
+            if (typeof f === "function") {
+                this.f.push(f);
             }
         }
     };
