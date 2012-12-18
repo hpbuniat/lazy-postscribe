@@ -8,8 +8,8 @@
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
-/*global window, postscribe */
-;(function(window) {
+/*global window, document, postscribe */
+;(function(window, document) {
     "use strict";
 
     window.lp = {
@@ -44,14 +44,39 @@
          * The nbl-callback, which will clear the stack
          */
         c: function() {
+            var a;
             while(this.p.length > 0) {
-                var a = this.p.shift();
+                a = this.p.shift();
                 postscribe(a[0], a[1], a[2]);
             }
 
-            while(this.f.length > 0) {
-                var f = this.f.shift();
-                f();
+            this.b();
+        },
+
+        /**
+         * Check if document.write is native code
+         *
+         * @return {Boolean}
+         */
+        n: function() {
+            return (document.write.toString().indexOf('[native code]') > -1);
+        },
+
+        /**
+         * When document.write was restored (after the last postscribe-activity), proceed with the callbacks
+         */
+        b: function() {
+            var f, t = this;
+            if (this.n() === false) {
+                window.setTimeout(function() {
+                    t.b();
+                }, 100);
+            }
+            else {
+                while(this.f.length > 0) {
+                    f = this.f.shift();
+                    f();
+                }
             }
         },
 
@@ -61,7 +86,7 @@
          * @return int
          */
         s: function() {
-            return this.s.length;
+            return this.p.length;
         },
 
         /**
@@ -75,4 +100,4 @@
             }
         }
     };
-}(window));
+}(window, document));
