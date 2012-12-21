@@ -59,7 +59,7 @@
          * @return {Boolean}
          */
         n: function() {
-            return (document.write.toString().indexOf('[native code]') > -1);
+            return (typeof document.write === "object" || (document.write.toString().indexOf('[native code]') > -1));
         },
 
         /**
