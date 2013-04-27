@@ -30,6 +30,8 @@
          * @param target
          * @param source
          * @param options
+         *
+         * @return this
          */
         l: function(target, source, options) {
             var t = this, f = typeof postscribe === 'function';
@@ -43,10 +45,14 @@
             if (f === true) {
                 t.c();
             }
+
+            return t;
         },
 
         /**
          * The nbl-callback, which will clear the stack
+         *
+         * @return this
          */
         c: function() {
             var a, f, t = this;
@@ -67,6 +73,8 @@
                     f();
                 }
             }
+
+            return t;
         },
 
         /**
@@ -91,11 +99,15 @@
          * Add a callback
          *
          * @param f
+         *
+         * @return this
          */
         a: function(f) {
             if (typeof f === "function") {
                 this.f.push(f);
             }
+
+            return this;
         }
     };
 }(window, document));
