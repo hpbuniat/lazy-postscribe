@@ -32,11 +32,15 @@
          * @param options
          */
         l: function(target, source, options) {
-            if (typeof postscribe === 'function') {
+            var t = this, f = typeof postscribe === 'function';
+            if (f && t.n() === true) {
                 postscribe(target, source, options);
             }
             else {
                 this.p.push([target, source, options]);
+                if (f === true) {
+                    t.c();
+                }
             }
         },
 
@@ -44,13 +48,24 @@
          * The nbl-callback, which will clear the stack
          */
         c: function() {
-            var a;
-            while(this.p.length > 0) {
-                a = this.p.shift();
-                postscribe(a[0], a[1], a[2]);
+            var a, f, t = this;
+            if (t.n() === false) {
+                window.setTimeout(function() {
+                    t.b();
+                }, 100);
             }
+            else {
+                while(t.p.length > 0) {
+                    a = t.p.shift();
+                    postscribe(a[0], a[1], a[2]);
+                }
 
-            this.b();
+                // When document.write was restored (after the last postscribe-activity), proceed with the callbacks
+                while(t.f.length > 0) {
+                    f = t.f.shift();
+                    f();
+                }
+            }
         },
 
         /**
@@ -60,24 +75,6 @@
          */
         n: function() {
             return (document.write.toString().indexOf('[native code]') > -1);
-        },
-
-        /**
-         * When document.write was restored (after the last postscribe-activity), proceed with the callbacks
-         */
-        b: function() {
-            var f, t = this;
-            if (this.n() === false) {
-                window.setTimeout(function() {
-                    t.b();
-                }, 100);
-            }
-            else {
-                while(this.f.length > 0) {
-                    f = this.f.shift();
-                    f();
-                }
-            }
         },
 
         /**

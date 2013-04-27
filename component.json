@@ -1,0 +1,11 @@
+{
+    "name":"lazy-postscribe",
+    "version":"0.1.0",
+    "main": "./dist/lazy.postscribe.min.js",
+    "repository":{
+        "type":"git",
+        "url":"git://github.com/hpbuniat/lazy-postscribe.git"
+    },
+    "dependencies":{
+    }
+}
