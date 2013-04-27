@@ -38,9 +38,10 @@
             }
             else {
                 this.p.push([target, source, options]);
-                if (f === true) {
-                    t.c();
-                }
+            }
+
+            if (f === true) {
+                t.c();
             }
         },
 
@@ -51,7 +52,7 @@
             var a, f, t = this;
             if (t.n() === false) {
                 window.setTimeout(function() {
-                    t.b();
+                    t.c();
                 }, 100);
             }
             else {
