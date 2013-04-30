@@ -34,15 +34,18 @@
          * @return this
          */
         l: function(target, source, options) {
-            var t = this, f = typeof postscribe === 'function';
-            if (f && t.n() === true) {
-                postscribe(target, source, options);
+            var t = this;
+            if (t.pf(false) && t.n() === true) {
+                try {
+                    postscribe(target, source, options);
+                }
+                catch(e) {}
             }
             else {
                 this.p.push([target, source, options]);
             }
 
-            if (f === true) {
+            if (t.pf(false)) {
                 t.c();
             }
 
@@ -61,10 +64,13 @@
                     t.c();
                 }, 100);
             }
-            else {
+            else if (t.pf(false)) {
                 while(t.p.length > 0) {
                     a = t.p.shift();
-                    postscribe(a[0], a[1], a[2]);
+                    try {
+                        postscribe(a[0], a[1], a[2]);
+                    }
+                    catch(e) {}
                 }
 
                 // When document.write was restored (after the last postscribe-activity), proceed with the callbacks
@@ -98,16 +104,29 @@
         /**
          * Add a callback
          *
-         * @param f
+         * @param  f
          *
          * @return this
          */
         a: function(f) {
-            if (typeof f === "function") {
-                this.f.push(f);
+            var t = this;
+            if (t.pf(f)) {
+                t.f.push(f);
             }
 
-            return this;
+            return t;
+        },
+
+        /**
+         * Test if a parameter or postscribe is a function (and so defined)
+         *
+         * @param  p
+         *
+         * @return boolean
+         */
+        pf: function(p) {
+            var t = (typeof postscribe !== 'undefined') ? postscribe : false;
+            return typeof (p ? p : t) === 'function';
         }
     };
 }(window, document));
