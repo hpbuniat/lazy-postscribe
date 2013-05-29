@@ -13,13 +13,25 @@
     "use strict";
 
     window.lp = {
+
+        /**
+         * A semaphore to indicate, that the settimeout-callback is active
+         *
+         * @var boolean
+         */
+        sem: false,
+
         /**
          * The stack for postscribe calls, until postscribe is ready
+         *
+         * @var array
          */
         p: [],
 
         /**
          * Callback stack for functions
+         *
+         * @var array
          */
         f: [],
 
@@ -57,29 +69,52 @@
          *
          * @return this
          */
-        c: function() {
-            var a, f, t = this;
-            if (t.n() === false) {
-                window.setTimeout(function() {
-                    t.c();
-                }, 100);
-            }
-            else if (t.pf(false)) {
-                while(t.p.length > 0) {
-                    a = t.p.shift();
-                    try {
-                        postscribe(a[0], a[1], a[2]);
+        c: function(s) {
+            var a, t = this;
+
+            if (s === true || t.sem === false) {
+                t.sem = false;
+
+                if (t.n() === false) {
+                    t.t();
+                }
+                else if (t.pf(false)) {
+                    if (t.p.length > 0) {
+                        while(t.p.length > 0) {
+                            a = t.p.shift();
+                            try {
+                                postscribe(a[0], a[1], a[2]);
+                            }
+                            catch(e) {
+                                alert(e);
+                            }
+                        }
+
+                        t.t();
                     }
-                    catch(e) {}
-                }
-
-                // When document.write was restored (after the last postscribe-activity), proceed with the callbacks
-                while(t.f.length > 0) {
-                    f = t.f.shift();
-                    f();
+                    else {
+                        // When document.write was restored (after the last postscribe-activity), proceed with the callbacks
+                        while(t.f.length > 0) {
+                            (t.f.shift())();
+                        }
+                    }
                 }
             }
 
+            return t;
+        },
+
+        /**
+         * Add a timeout loop to ensure document.write is a native function
+         *
+         * @returns this
+         */
+        t: function() {
+            var t = this;
+            t.sem = true;
+            window.setTimeout(function() {
+                t.c(true);
+            }, 100);
             return t;
         },
 
