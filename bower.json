@@ -7,5 +7,6 @@
         "url":"git://github.com/hpbuniat/lazy-postscribe.git"
     },
     "dependencies":{
+        "postscribe": "1.x"
     }
 }
