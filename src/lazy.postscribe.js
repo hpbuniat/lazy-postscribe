@@ -4,7 +4,7 @@
  * A simple wrapper to use postscribe with a non-blocking js-loader
  *
  * @author Hans-Peter Buniat <hpbuniat@googlemail.com>
- * @copyright 2014 Hans-Peter Buniat <hpbuniat@googlemail.com>
+ * @copyright Hans-Peter Buniat <hpbuniat@googlemail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
