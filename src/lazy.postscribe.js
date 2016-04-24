@@ -24,14 +24,14 @@
         /**
          * The stack for postscribe calls, until postscribe is ready
          *
-         * @var array
+         * @var Array
          */
         p: [],
 
         /**
          * Callback stack for functions
          *
-         * @var array
+         * @var Array
          */
         f: [],
 
@@ -79,8 +79,8 @@
                     t.t();
                 }
                 else if (t.pf(false)) {
-                    if (t.p.length > 0) {
-                        while(t.p.length > 0) {
+                    if (t.s() > 0) {
+                        while(t.s() > 0) {
                             a = t.p.shift();
                             try {
                                 postscribe(a[0], a[1], a[2]);
@@ -145,7 +145,7 @@
          */
         a: function(f) {
             var t = this;
-            if (t.pf(f)) {
+            if (t.pf(f) === true) {
                 t.f.push(f);
             }
 
